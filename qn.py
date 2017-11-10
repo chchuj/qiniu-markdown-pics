@@ -28,7 +28,7 @@ def qn_upload (q, bucket, pic):
         print qn_info
     else:
         ret = (qn_ret['key'] == qn_pic_key and qn_ret['hash'] == etag(pic))
-    qn_pic_link = 'http://%s.qiniudn.com/%s' %(bucket, qn_pic_key)
+    qn_pic_link = 'http://oz7iknw35.bkt.clouddn.com/%s' % qn_pic_key     #新的七牛域名格式
     return ret, qn_pic_link
 
 def process_md_pic (md):
@@ -68,7 +68,7 @@ def process_md_pic (md):
 
                 # maybe a url
                 # already from qiniu
-                if old_link.find('%s.qiniudn.com' %config['BUCKET']) != -1:
+                if old_link.find('oz7iknw35.bkt.clouddn.com']) != -1:   #新的七牛域名格式
                     ignore = ignore + 1
                     print 'already in qiuniu, ignore'
                     continue
@@ -97,8 +97,8 @@ def process_md_pic (md):
                 os.remove(tmp_pic)
                 print 'upload failure' 
                 continue
-
-            os.remove(tmp_pic)
+            
+            os.remove(tmp_pic)  #如果出现WindowsError: [Error 32]，要将此行注释掉
 
             new_md = update_pic_link(new_md, old_link, qn_pic_link)
             print 'success'
@@ -145,5 +145,6 @@ if __name__ == '__main__':
     print 'origin markdown file backup in: %s' %(bak_md)
 
     process_md_pic (md)
-
-    os.remove (bak_md)
+    
+    # better remove manually after checking
+    # os.remove (bak_md)
